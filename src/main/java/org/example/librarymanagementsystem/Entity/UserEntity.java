@@ -23,7 +23,6 @@ public class UserEntity {
 
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    private Set<Roles> roles;
+    @ElementCollection
+    private Set<String> roles;
 }

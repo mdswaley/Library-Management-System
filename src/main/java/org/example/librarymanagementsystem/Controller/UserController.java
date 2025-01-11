@@ -1,5 +1,7 @@
 package org.example.librarymanagementsystem.Controller;
 
+import org.example.librarymanagementsystem.DTOs.LoginDTO;
+import org.example.librarymanagementsystem.DTOs.SignUpDTO;
 import org.example.librarymanagementsystem.DTOs.UserDTO;
 import org.example.librarymanagementsystem.Service.UserService;
 import org.springframework.http.HttpStatus;
@@ -15,9 +17,24 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/addUser")
-    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDTO){
-        return new ResponseEntity<>(userService.addUser(userDTO), HttpStatus.CREATED);
+    @PostMapping("/signUp")
+    public ResponseEntity<String> signUp(@RequestBody SignUpDTO userSignUpDTO) {
+        try {
+            userService.signUpUser(userSignUpDTO);
+            return new ResponseEntity<>("User registered successfully.", HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginDTO userLoginDTO) {
+        boolean isAuthenticated = userService.loginUser(userLoginDTO);
+        if (isAuthenticated) {
+            return new ResponseEntity<>("Login successful.", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Invalid email or password.", HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @GetMapping("/{userId}")
