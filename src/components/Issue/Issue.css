@@ -1,19 +1,62 @@
-#isssue {
+.issue-books {
+    max-width: 600px;
     margin: auto;
-}
-
-.sel {
-    width: 35%;
-    margin: 10px auto;
-}
-
-#results {
-    margin: 25px auto;
-    width: 60%;
+    padding: 20px;
+    background-color: #f8f9fa;
     border-radius: 8px;
-    background-color: rgb(111, 167, 219);
-}
-
-.table td {
-    vertical-align: middle;
-}
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .issue-books h1 {
+    margin-bottom: 20px;
+    color: #343a40;
+  }
+  
+  .form-group {
+    margin: 15px 0;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  select,
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .error {
+    color: red;
+    margin: 10px 0;
+  }
+  
+  .success {
+    color: green;
+    margin: 10px 0;
+  }
+  

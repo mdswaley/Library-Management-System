@@ -1,11 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import AdminNav from "../Nav/AdminNav";
+import UserNav from "../Nav/UserNav";
 
-const AdminLayout = () => {
+const UserLayout = () => {
   return (
     <div>
-      <AdminNav />
+      <UserNav />
 
       <main style={{ marginTop: "80px", padding: "20px" }}>
         <Outlet />
@@ -14,4 +14,4 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+export default UserLayout;

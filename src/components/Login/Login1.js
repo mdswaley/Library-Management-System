@@ -23,7 +23,7 @@ const Login1 = () => {
       if (userData.roles === 'ADMIN') {
         window.location.href = '/admin';
       } else {
-        window.location.href = '/userNav';
+        window.location.href = '/user';
       }
     } catch (err) {
       setError('Invalid email or password.');
