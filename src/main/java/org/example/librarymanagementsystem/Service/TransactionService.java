@@ -38,8 +38,12 @@ public class TransactionService {
             throw new IllegalArgumentException("Book is not available for issue!");
         }
 
+        if(book.getQuantity() > 1){
+            book.setQuantity(book.getQuantity() - 1);
+        }else{
+            throw new ResourceNotFoundException("Book is unavailable.");
+        }
 
-        book.setQuantity(book.getQuantity() - 1);
         BooksEntity updatedBook = booksRepo.save(book);
 
         TransactionEntity transaction = new TransactionEntity();
@@ -56,16 +60,23 @@ public class TransactionService {
         BooksEntity book = booksRepo.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found with ID: " + bookId));
 
+        TransactionEntity transaction = transactionRepo.findLatestIssuedTransaction(bookId, userId);
+
+        if (transaction == null) {
+            throw new IllegalStateException("This book was not issued to the user.");
+        }
+
         book.setQuantity(book.getQuantity() + 1);
         BooksEntity updatedBook = booksRepo.save(book);
 
-        TransactionEntity transaction = new TransactionEntity();
-        transaction.setBook(book);
-        transaction.setUserId(userId);
-        transaction.setTransactionType(TransactionType.RETURN);
-        transaction.setTimestamp(LocalDateTime.now());
-        transactionRepo.save(transaction);
+        TransactionEntity returnTransaction = new TransactionEntity();
+        returnTransaction.setBook(book);
+        returnTransaction.setUserId(userId);
+        returnTransaction.setTransactionType(TransactionType.RETURN);
+        returnTransaction.setTimestamp(LocalDateTime.now());
+        transactionRepo.save(returnTransaction);
 
         return modelMapper.map(updatedBook, BooksDTO.class);
     }
+
 }
