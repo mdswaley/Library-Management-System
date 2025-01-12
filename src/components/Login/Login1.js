@@ -21,9 +21,9 @@ const Login1 = () => {
 
       // Redirect based on role
       if (userData.roles === 'ADMIN') {
-        window.location.href = '/admin-dashboard';
+        window.location.href = '/admin';
       } else {
-        window.location.href = '/user-dashboard';
+        window.location.href = '/userNav';
       }
     } catch (err) {
       setError('Invalid email or password.');
