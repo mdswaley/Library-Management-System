@@ -8,6 +8,7 @@ import UserLayout from './components/HomePage/UserLayout';
 import UserHome from './components/HomePage/UserHome';
 import ManageBooks from './components/Books/ManageBooks';
 import IssueBooks from './components/Issue/IssueBooks';
+import SignupPage from './components/SignUp/SignupPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         {/* Login Route */}
         <Route path="/" element={<Login1 />} />
+        <Route path="/signup" element={<SignupPage />} />
 
         {/* Admin Routes */}
         <Route path="/admin/*" element={<AdminLayout />}>

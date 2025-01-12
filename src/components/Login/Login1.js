@@ -17,9 +17,6 @@ const Login1 = () => {
 
       const userData = response.data;
 
-      // Store user data in localStorage
-
-      // Redirect based on role
       if (userData.roles === 'ADMIN') {
         window.location.href = '/admin';
       } else {
@@ -28,6 +25,10 @@ const Login1 = () => {
     } catch (err) {
       setError('Invalid email or password.');
     }
+  };
+
+  const handleSignupRedirect = () => {
+    window.location.href = '/signup';
   };
 
   return (
@@ -55,6 +56,10 @@ const Login1 = () => {
         </div>
         <button type="submit">Login</button>
       </form>
+      <div className="signup-redirect">
+        <p>Don't have an account?</p>
+        <button onClick={handleSignupRedirect}>Sign Up</button>
+      </div>
     </div>
   );
 };
