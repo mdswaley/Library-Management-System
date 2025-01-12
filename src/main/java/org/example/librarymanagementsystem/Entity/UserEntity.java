@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.librarymanagementsystem.Entity.Enum.Roles;
 
-import java.util.Set;
 
 @Entity
 @Getter
@@ -23,6 +22,6 @@ public class UserEntity {
 
     private String password;
 
-    @ElementCollection
-    private Set<String> roles;
+    @Enumerated(EnumType.STRING)
+    private Roles roles;
 }

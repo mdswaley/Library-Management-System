@@ -1,6 +1,6 @@
 package org.example.librarymanagementsystem.DTOs;
 
-import jakarta.persistence.Column;
+//import jakarta.persistence.Column;
 import lombok.*;
 
 @Getter

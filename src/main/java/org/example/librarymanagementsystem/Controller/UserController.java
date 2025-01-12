@@ -3,13 +3,20 @@ package org.example.librarymanagementsystem.Controller;
 import org.example.librarymanagementsystem.DTOs.LoginDTO;
 import org.example.librarymanagementsystem.DTOs.SignUpDTO;
 import org.example.librarymanagementsystem.DTOs.UserDTO;
+import org.example.librarymanagementsystem.Entity.Enum.Roles;
+import org.example.librarymanagementsystem.Entity.UserEntity;
 import org.example.librarymanagementsystem.Service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
     private final UserService userService;
 
@@ -28,13 +35,37 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO userLoginDTO) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDTO userLoginDTO) {
         boolean isAuthenticated = userService.loginUser(userLoginDTO);
         if (isAuthenticated) {
-            return new ResponseEntity<>("Login successful.", HttpStatus.OK);
+            UserEntity user = userService.findByEmail(userLoginDTO.getEmail());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Login successful.");
+            response.put("roles", user.getRoles());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Invalid email or password.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(Map.of("message", "Invalid email or password."), HttpStatus.UNAUTHORIZED);
         }
+    }
+
+
+    @GetMapping("/init-admin")
+    public String ensureAdminExists() {
+        userService.ensureAdminExists();
+        return "Admin initialized!";
+    }
+
+    @GetMapping
+    public List<UserEntity> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @PutMapping("/{id}/role")
+    public String updateUserRole(@PathVariable Long id, @RequestParam Roles newRole) {
+        userService.updateUserRole(id, newRole);
+        return "User role updated!";
     }
 
     @GetMapping("/{userId}")
@@ -43,10 +74,6 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
-    @PutMapping("/update/{userId}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long userId,@RequestBody UserDTO userDTO){
-        return ResponseEntity.ok(userService.updateUser(userId,userDTO));
-    }
 
 
     @DeleteMapping("/delete/{userId}")
