@@ -8,7 +8,8 @@ const ManageBooks = () => {
     title: "",
     author: "",
     isbn: "",
-    quantity: "",
+    availableQuantity: "",
+    issueQuantity: ""
   });
   const [error, setError] = useState("");
 
@@ -33,7 +34,7 @@ const ManageBooks = () => {
       .post("http://localhost:8080/Books/addBook", newBook)
       .then((response) => {
         setBooks((prevBooks) => [...prevBooks, response.data]);
-        setNewBook({ title: "", author: "", isbn: "", quantity: "" });
+        setNewBook({ title: "", author: "", isbn: "",availableQuantity: "", IssueQuantity: ""});
       })
       .catch(() => setError("Failed to add book."));
   };
@@ -82,7 +83,7 @@ const ManageBooks = () => {
             type="number"
             name="quantity"
             placeholder="Quantity"
-            value={newBook.quantity}
+            value={newBook.availableQuantity}
             onChange={handleChange}
             required
           />
@@ -99,7 +100,8 @@ const ManageBooks = () => {
               <th>Title</th>
               <th>Author</th>
               <th>ISBN</th>
-              <th>Quantity</th>
+              <th>IssueQuantity</th>
+              <th>AvailableQuantity</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -109,7 +111,8 @@ const ManageBooks = () => {
                 <td>{book.title}</td>
                 <td>{book.author}</td>
                 <td>{book.isbn}</td>
-                <td>{book.quantity}</td>
+                <td>{book.issueQuantity}</td>
+                <td>{book.availableQuantity}</td>
                 <td>
                   <button
                     className="delete-button"

@@ -1,62 +1,112 @@
 .issue-books {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.issue-books h1 {
+  margin-bottom: 20px;
+  color: #343a40;
+}
+
+.form-container,
+.transaction-details {
+  width: 48%;
+}
+
+.form-container {
+  text-align: left;
+}
+
+.transaction-details {
+  padding: 15px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-details h2 {
+  margin-bottom: 15px;
+  color: #343a40;
+}
+
+.transaction-details p {
+  margin: 8px 0;
+  color: #6c757d;
+}
+
+.form-group {
+  margin: 15px 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #495057;
+}
+
+select,
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  margin: 10px 0;
+}
+
+.success {
+  color: green;
+  margin: 10px 0;
+}
+
+/* Responsive layout for small screens */
+@media (max-width: 768px) {
+  .issue-books {
+    flex-direction: column;
+    align-items: center;
   }
-  
-  .issue-books h1 {
+
+  .form-container,
+  .transaction-details {
+    width: 90%;
     margin-bottom: 20px;
-    color: #343a40;
   }
-  
-  .form-group {
-    margin: 15px 0;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
-  
-  select,
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-  }
-  
+
   .button-group {
-    display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 10px;
   }
-  
-  button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  .error {
-    color: red;
-    margin: 10px 0;
-  }
-  
-  .success {
-    color: green;
-    margin: 10px 0;
-  }
-  
+}

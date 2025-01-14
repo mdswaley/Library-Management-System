@@ -8,6 +8,7 @@ const IssueBooks = () => {
   const [userId, setUserId] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [transactionData, setTransactionData] = useState(null);
 
   // Fetch all books
   useEffect(() => {
@@ -27,12 +28,14 @@ const IssueBooks = () => {
     axios
       .post(`http://localhost:8080/transaction/issue/${selectedBook}/${userId}`)
       .then((response) => {
-        setSuccess(`Book issued successfully! Title: ${response.data.title}`);
+        setSuccess(`Book issued successfully! Title: ${response.data.book.title}`);
         setError("");
+        setTransactionData(response.data);
       })
       .catch(() => {
         setError("Failed to issue book.");
         setSuccess("");
+        setTransactionData(null);
       });
   };
 
@@ -46,12 +49,14 @@ const IssueBooks = () => {
     axios
       .post(`http://localhost:8080/transaction/return/${selectedBook}/${userId}`)
       .then((response) => {
-        setSuccess(`Book returned successfully! Title: ${response.data.title}`);
+        setSuccess(`Book returned successfully! Title: ${response.data.book.title}`);
         setError("");
+        setTransactionData(response.data);
       })
       .catch(() => {
         setError("Failed to return book.");
         setSuccess("");
+        setTransactionData(null);
       });
   };
 
@@ -60,34 +65,53 @@ const IssueBooks = () => {
       <h1>Issue or Return a Book</h1>
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
-      <div className="form-group">
-        <label htmlFor="book">Select a Book:</label>
-        <select
-          id="book"
-          value={selectedBook}
-          onChange={(e) => setSelectedBook(e.target.value)}
-        >
-          <option value="">--Select a Book--</option>
-          {books.map((book) => (
-            <option key={book.id} value={book.id}>
-              {book.title} - {book.author}
-            </option>
-          ))}
-        </select>
+      <div className="form-container">
+        <div className="form-group">
+          <label htmlFor="book">Select a Book:</label>
+          <select
+            id="book"
+            value={selectedBook}
+            onChange={(e) => setSelectedBook(e.target.value)}
+          >
+            <option value="">--Select a Book--</option>
+            {books.map((book) => (
+              <option key={book.id} value={book.id}>
+                {book.title} - {book.author}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="userId">Enter User ID:</label>
+          <input
+            type="text"
+            id="userId"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            placeholder="Enter User ID"
+          />
+        </div>
+        <div className="button-group">
+          <button onClick={handleIssueBook}>Issue Book</button>
+          <button onClick={handleReturnBook}>Return Book</button>
+        </div>
       </div>
-      <div className="form-group">
-        <label htmlFor="userId">Enter User ID:</label>
-        <input
-          type="text"
-          id="userId"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-          placeholder="Enter User ID"
-        />
-      </div>
-      <div className="button-group">
-        <button onClick={handleIssueBook}>Issue Book</button>
-        <button onClick={handleReturnBook}>Return Book</button>
+      
+      <div className="transaction-details">
+        <h2>Transaction Details</h2>
+        {transactionData ? (
+          <div>
+            <p><strong>Transaction Type:</strong> {transactionData.transactionType}</p>
+            <p><strong>Book Title:</strong> {transactionData.book.title}</p>
+            <p><strong>Book Author:</strong> {transactionData.book.author}</p>
+            <p><strong>User ID:</strong> {transactionData.user.id}</p>
+            <p><strong>Issue Date:</strong> {new Date(transactionData.issueDate).toLocaleString()}</p>
+            <p><strong>Return Date:</strong> {new Date(transactionData.returnDate).toLocaleString()}</p>
+            <p><strong>Fine :</strong> {transactionData.fine}</p>
+          </div>
+        ) : (
+          <p>No transaction data available.</p>
+        )}
       </div>
     </div>
   );
