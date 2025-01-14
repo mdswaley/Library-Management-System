@@ -22,6 +22,8 @@ public class BooksEntity {
     @Column(unique = true, nullable = false)
     private String isbn;
 
+    private Integer IssueQuantity;
+
     @Column(nullable = false)
-    private Integer quantity;
+    private Integer AvailableQuantity;
 }

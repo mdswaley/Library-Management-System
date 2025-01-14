@@ -23,11 +23,19 @@ public class TransactionEntity {
     @JoinColumn(name = "book_id", nullable = false)
     private BooksEntity book;
 
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    private LocalDateTime timestamp;
+    private LocalDateTime issueDate;
 
+    @Column(name = "return_date")
+    private LocalDateTime returnDate;
+
+    private Double fine;
+
+    private LocalDateTime timestamp;
 }

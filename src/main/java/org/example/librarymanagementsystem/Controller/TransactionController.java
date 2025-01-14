@@ -1,7 +1,8 @@
 package org.example.librarymanagementsystem.Controller;
 
 import org.example.librarymanagementsystem.DTOs.BooksDTO;
-import org.example.librarymanagementsystem.Service.BooksService;
+import org.example.librarymanagementsystem.DTOs.TransactionDTO;
+import org.example.librarymanagementsystem.Exception.ResourceNotFoundException;
 import org.example.librarymanagementsystem.Service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,24 +19,22 @@ public class TransactionController {
     }
 
     @PostMapping("/issue/{bookId}/{userId}")
-    public ResponseEntity<BooksDTO> issueBook(@PathVariable Long bookId, @PathVariable Long userId) {
+    public ResponseEntity<TransactionDTO> issueBook(@PathVariable Long bookId, @PathVariable Long userId) {
         try {
-            BooksDTO booksDTO = transactionService.issueBook(bookId, userId);
-            return new ResponseEntity<>(booksDTO, HttpStatus.OK);
+            TransactionDTO transactionDTO = transactionService.issueBook(bookId, userId);
+            return new ResponseEntity<>(transactionDTO, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/return/{bookId}/{userId}")
-    public ResponseEntity<BooksDTO> returnBook(@PathVariable Long bookId, @PathVariable Long userId) {
+    public ResponseEntity<TransactionDTO> returnBook(@PathVariable Long bookId, @PathVariable Long userId) {
         try {
-            BooksDTO booksDTO = transactionService.returnBook(bookId, userId);
-            return new ResponseEntity<>(booksDTO, HttpStatus.OK);
+            TransactionDTO transactionDTO = transactionService.returnBook(bookId, userId);
+            return new ResponseEntity<>(transactionDTO, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-
 }
