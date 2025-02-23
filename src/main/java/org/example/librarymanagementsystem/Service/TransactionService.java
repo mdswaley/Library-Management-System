@@ -1,6 +1,5 @@
 package org.example.librarymanagementsystem.Service;
 
-import org.example.librarymanagementsystem.DTOs.BooksDTO;
 import org.example.librarymanagementsystem.DTOs.TransactionDTO;
 import org.example.librarymanagementsystem.Entity.BooksEntity;
 import org.example.librarymanagementsystem.Entity.TransactionEntity;
@@ -45,7 +44,7 @@ public class TransactionService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
 
         if (!isBookAvailable(bookId)) {
-            throw new IllegalArgumentException("Book is not available for issue!");
+            throw new ResourceNotFoundException("Book is not available for issue!");
         }
 
         book.setAvailableQuantity(book.getAvailableQuantity() - 1);
@@ -74,18 +73,18 @@ public class TransactionService {
         List<TransactionEntity> issueTransactions = transactionRepo.findIssuedTransactions(bookId, userId);
 
         if (issueTransactions.isEmpty()) {
-            throw new IllegalStateException("This book was not issued to the user.");
+            throw new ResourceNotFoundException("This book was not issued to the user.");
         }
 
         if(book.getIssueQuantity() == 0){
-            throw new IllegalArgumentException("Already Return Book.");
+            throw new ResourceNotFoundException("Already Return Book.");
         }
 
         TransactionEntity issueTransaction = issueTransactions.get(0);
 
         LocalDateTime returnDate = LocalDateTime.now();
         long daysLate = ChronoUnit.DAYS.between(issueTransaction.getIssueDate(), returnDate) - 14;
-        double fine = daysLate > 0 ? daysLate * 2.0 : 0.0;
+        double fine = daysLate > 0 ? daysLate * 10.0 : 0.0;
 
         book.setIssueQuantity(book.getIssueQuantity() - 1);
         book.setAvailableQuantity(book.getAvailableQuantity() + 1);

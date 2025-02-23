@@ -1,5 +1,6 @@
 package org.example.librarymanagementsystem.Controller;
 
+import jakarta.validation.Valid;
 import org.example.librarymanagementsystem.DTOs.LoginDTO;
 import org.example.librarymanagementsystem.DTOs.SignUpDTO;
 import org.example.librarymanagementsystem.DTOs.UserDTO;
@@ -9,7 +10,6 @@ import org.example.librarymanagementsystem.Service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping("/signUp")
-    public ResponseEntity<String> signUp(@RequestBody SignUpDTO userSignUpDTO) {
+    public ResponseEntity<String> signUp(@Valid @RequestBody SignUpDTO userSignUpDTO) {
         try {
             userService.signUpUser(userSignUpDTO);
             return new ResponseEntity<>("User registered successfully.", HttpStatus.CREATED);
@@ -74,16 +74,10 @@ public class UserController {
         return ResponseEntity.ok(userDTO);
     }
 
-
-
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<String> deleteUserById(@PathVariable Long userId){
         userService.deleteUser(userId);
         return ResponseEntity.ok("User with id "+userId+" is deleted.");
     }
-
-
-
-
 
 }

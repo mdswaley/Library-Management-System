@@ -1,6 +1,5 @@
 package org.example.librarymanagementsystem.Controller;
 
-import org.example.librarymanagementsystem.DTOs.BooksDTO;
 import org.example.librarymanagementsystem.DTOs.TransactionDTO;
 import org.example.librarymanagementsystem.Exception.ResourceNotFoundException;
 import org.example.librarymanagementsystem.Service.TransactionService;
@@ -33,7 +32,7 @@ public class TransactionController {
         try {
             TransactionDTO transactionDTO = transactionService.returnBook(bookId, userId);
             return new ResponseEntity<>(transactionDTO, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
