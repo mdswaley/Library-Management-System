@@ -12,6 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class BooksEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

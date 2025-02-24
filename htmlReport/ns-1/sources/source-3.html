@@ -1,0 +1,207 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > UserService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.example.librarymanagementsystem.Service</a>
+</div>
+
+<h1>Coverage Summary for Class: UserService (org.example.librarymanagementsystem.Service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserService</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.example.librarymanagementsystem.Service;
+&nbsp;
+&nbsp;
+&nbsp;import org.example.librarymanagementsystem.DTOs.LoginDTO;
+&nbsp;import org.example.librarymanagementsystem.DTOs.SignUpDTO;
+&nbsp;import org.example.librarymanagementsystem.DTOs.UserDTO;
+&nbsp;import org.example.librarymanagementsystem.Entity.Enum.Roles;
+&nbsp;import org.example.librarymanagementsystem.Entity.UserEntity;
+&nbsp;import org.example.librarymanagementsystem.Exception.ResourceNotFoundException;
+&nbsp;import org.example.librarymanagementsystem.Repository.UserRepo;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;
+&nbsp;@Service
+&nbsp;public class UserService {
+&nbsp;    private final UserRepo userRepo;
+&nbsp;    private final ModelMapper modelMapper;
+<b class="nc">&nbsp;    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();</b>
+&nbsp;
+<b class="nc">&nbsp;    public UserService(UserRepo userRepo, ModelMapper modelMapper) {</b>
+<b class="nc">&nbsp;        this.userRepo = userRepo;</b>
+<b class="nc">&nbsp;        this.modelMapper = modelMapper;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public UserEntity signUpUser(SignUpDTO userSignUpDTO) {
+<b class="nc">&nbsp;        if (userRepo.existsByEmail(userSignUpDTO.getEmail())) {</b>
+<b class="nc">&nbsp;            throw new IllegalArgumentException(&quot;Email already in use.&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        UserEntity user = new UserEntity();</b>
+<b class="nc">&nbsp;        user.setEmail(userSignUpDTO.getEmail());</b>
+<b class="nc">&nbsp;        user.setPassword(passwordEncoder.encode(userSignUpDTO.getPassword()));</b>
+<b class="nc">&nbsp;        user.setName(userSignUpDTO.getName());</b>
+<b class="nc">&nbsp;        user.setRoles(Roles.USER);</b>
+&nbsp;
+<b class="nc">&nbsp;        return userRepo.save(user);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean loginUser(LoginDTO userLoginDTO) {
+<b class="nc">&nbsp;        UserEntity user = userRepo.findByEmail(userLoginDTO.getEmail()).orElse(null);</b>
+<b class="nc">&nbsp;        return user != null &amp;&amp; passwordEncoder.matches(userLoginDTO.getPassword(), user.getPassword());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void ensureAdminExists() {
+<b class="nc">&nbsp;        String adminEmail = &quot;raja@gmail.com&quot;;</b>
+<b class="nc">&nbsp;        if (!userRepo.findByEmail(adminEmail).isPresent()) {</b>
+<b class="nc">&nbsp;            UserEntity admin = new UserEntity();</b>
+<b class="nc">&nbsp;            admin.setName(&quot;Admin&quot;);</b>
+<b class="nc">&nbsp;            admin.setEmail(adminEmail);</b>
+<b class="nc">&nbsp;            admin.setPassword(passwordEncoder.encode(&quot;1234&quot;));</b>
+<b class="nc">&nbsp;            admin.setRoles(Roles.ADMIN);</b>
+<b class="nc">&nbsp;            userRepo.save(admin);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;UserEntity&gt; getAllUsers() {
+<b class="nc">&nbsp;        return userRepo.findAll();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void updateUserRole(Long userId, Roles newRole) {
+<b class="nc">&nbsp;        UserEntity user = userRepo.findById(userId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User not found&quot;));</b>
+<b class="nc">&nbsp;        user.setRoles(newRole);</b>
+<b class="nc">&nbsp;        userRepo.save(user);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public UserDTO getUserById(Long userId) {
+<b class="nc">&nbsp;        UserEntity userEntity = userRepo.findById(userId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User not found with ID: &quot; + userId));</b>
+&nbsp;
+<b class="nc">&nbsp;        return modelMapper.map(userEntity, UserDTO.class);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public void deleteUser(Long userId) {
+<b class="nc">&nbsp;        UserEntity userEntity = userRepo.findById(userId)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User not found with ID: &quot; + userId));</b>
+<b class="nc">&nbsp;        userRepo.delete(userEntity);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public UserEntity findByEmail(String email) {
+<b class="nc">&nbsp;        return userRepo.findByEmail(email)</b>
+<b class="nc">&nbsp;                .orElseThrow(() -&gt; new ResourceNotFoundException(&quot;User not found with email: &quot; + email));</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-02-24 20:52</div>
+</div>
+</body>
+</html>

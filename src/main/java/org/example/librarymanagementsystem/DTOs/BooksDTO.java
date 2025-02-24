@@ -12,6 +12,8 @@ import org.example.librarymanagementsystem.Validation.ValidISBN;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class BooksDTO {
     private Long id;
 

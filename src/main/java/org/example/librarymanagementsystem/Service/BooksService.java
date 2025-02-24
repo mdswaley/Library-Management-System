@@ -24,18 +24,17 @@ public class BooksService {
     }
 
     public BooksDTO addBook(BooksDTO booksDTO){
-        log.info("Attempting to create a new book: {}", booksDTO);
-        BooksEntity booksEntity = modelMapper.map(booksDTO, BooksEntity.class);
+        log.info("Attempting to create a new book");
         Optional<BooksEntity> isExistByTitle = booksRepo.findBooksEntitiesByTitle(booksDTO.getTitle());
 
         if(isExistByTitle.isPresent()){
             log.error("Book already exists with title: {}", booksDTO.getTitle());
             throw new RuntimeException("Book already exists.");
         }
-
-        booksEntity = booksRepo.save(booksEntity);
+        BooksEntity booksEntity = modelMapper.map(booksDTO, BooksEntity.class);
+        BooksEntity saveBook = booksRepo.save(booksEntity);
         log.info("Successfully created new book with id: {}", booksEntity.getId());
-        return modelMapper.map(booksEntity, BooksDTO.class);
+        return modelMapper.map(saveBook, BooksDTO.class);
     }
 
     public void isExistsByBookId(Long bookId) {
@@ -50,9 +49,12 @@ public class BooksService {
     public BooksDTO updateBook(Long bookId, BooksDTO booksDTO){
         log.info("Updating book with id: {}, new details: {}", bookId, booksDTO);
         isExistsByBookId(bookId);
+
         BooksEntity booksEntity = modelMapper.map(booksDTO, BooksEntity.class);
         booksEntity.setId(bookId);
+
         BooksEntity updatedBook = booksRepo.save(booksEntity);
+
         log.info("Successfully updated book with id: {}", bookId);
         return modelMapper.map(updatedBook, BooksDTO.class);
     }
@@ -62,7 +64,7 @@ public class BooksService {
         BooksEntity booksEntity = booksRepo.findById(id)
                 .orElseThrow(() -> {
                     log.error("Book with id {} not found", id);
-                    throw new ResourceNotFoundException("Book not found");
+                    throw new ResourceNotFoundException("Book not found with id : "+id);
                 });
         log.info("Successfully retrieved book: {}", booksEntity);
         return modelMapper.map(booksEntity, BooksDTO.class);
@@ -87,11 +89,12 @@ public class BooksService {
     public Optional<BooksDTO> getBookByTitle(String title){
         log.info("Fetching book by title: {}", title);
         Optional<BooksEntity> isExistBook = booksRepo.findBooksEntitiesByTitle(title);
-        if (isExistBook.isPresent()) {
-            log.info("Book found: {}", isExistBook.get());
-        } else {
+
+        if (isExistBook.isEmpty()) {
             log.warn("No book found with title: {}", title);
+            throw new ResourceNotFoundException("Book not found by title : "+title);
         }
+
         return isExistBook.map(book -> modelMapper.map(book, BooksDTO.class));
     }
 

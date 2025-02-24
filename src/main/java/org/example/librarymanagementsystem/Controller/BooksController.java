@@ -2,7 +2,6 @@ package org.example.librarymanagementsystem.Controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.librarymanagementsystem.DTOs.BooksDTO;
-import org.example.librarymanagementsystem.Exception.ResourceNotFoundException;
 import org.example.librarymanagementsystem.Service.BooksService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,14 +53,9 @@ public class BooksController {
     }
 
     @GetMapping("/title/{title}")
-    public ResponseEntity<BooksDTO> getBookByTitle(@PathVariable String title){
+    public ResponseEntity<Optional<BooksDTO>> getBookByTitle(@PathVariable String title){
         log.info("Fetching book with title: {}", title);
-        Optional<BooksDTO> booksDTO = booksService.getBookByTitle(title);
-        return booksDTO.map(ResponseEntity::ok)
-                .orElseThrow(() -> {
-                    log.error("Book not found with title: {}", title);
-                    return new ResourceNotFoundException("Book is not present with title: " + title);
-                });
+        return ResponseEntity.ok(booksService.getBookByTitle(title));
     }
 
     @GetMapping("/author/{authorName}")
