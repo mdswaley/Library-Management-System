@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.librarymanagementsystem.Entity.Enum.Roles;
+import org.example.librarymanagementsystem.Validation.UserEmail;
 
 
 @Entity
@@ -19,6 +20,7 @@ public class UserEntity {
     private String name;
 
     @Column(unique = true,nullable = false)
+    @UserEmail
     private String email;
 
     @JsonIgnore
